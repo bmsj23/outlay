@@ -11,8 +11,20 @@ import './styles/expense-entry.css'
 
 const App = () => {
   const [activeView, setActiveView] = useState('expenses')
+  const [expenses, setExpenses] = useState([])
   const [isExpenseFormOpen, setIsExpenseFormOpen] = useState(false)
   const isExpensesView = activeView === 'expenses'
+
+  const handleAddExpense = (expense) => {
+    setExpenses((currentExpenses) => [
+      ...currentExpenses,
+      {
+        id: crypto.randomUUID(),
+        ...expense,
+      },
+    ])
+    setIsExpenseFormOpen(false)
+  }
 
   return (
     <div className="app-shell">
@@ -44,7 +56,10 @@ const App = () => {
         </div>
 
         {isExpensesView ? (
-          <ExpensesView onAddExpense={() => setIsExpenseFormOpen(true)} />
+          <ExpensesView
+            expenseCount={expenses.length}
+            onAddExpense={() => setIsExpenseFormOpen(true)}
+          />
         ) : (
           <WeeklySummaryView />
         )}
@@ -53,7 +68,10 @@ const App = () => {
       <AppFooter />
 
       {isExpenseFormOpen ? (
-        <ExpenseFormDialog onClose={() => setIsExpenseFormOpen(false)} />
+        <ExpenseFormDialog
+          onAddExpense={handleAddExpense}
+          onClose={() => setIsExpenseFormOpen(false)}
+        />
       ) : null}
     </div>
   )

@@ -153,11 +153,21 @@
   background: var(--color-surface-raised);
 }
 
-.form-field > p {
+.form-field input[aria-invalid='true'] {
+  border-color: #c2410c;
+  background: #fff7ed;
+}
+
+.field-message {
   margin-top: 0.35rem;
   color: var(--color-text-muted);
   font-size: 0.7rem;
   line-height: 1.4;
+}
+
+.field-message[data-error='true'] {
+  color: #c2410c;
+  font-weight: 600;
 }
 
 .amount-input {

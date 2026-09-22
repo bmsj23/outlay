@@ -1,7 +1,7 @@
 import { AddExpenseButton } from '../components/AddExpenseButton.jsx'
 import emptyReceiptIcon from '../assets/icons/empty-receipt.svg'
 
-export const ExpensesView = ({ onAddExpense }) => (
+export const ExpensesView = ({ expenseCount, onAddExpense }) => (
   <section
     className="view-panel"
     id="expenses-panel"
@@ -28,7 +28,9 @@ export const ExpensesView = ({ onAddExpense }) => (
           <h2 id="history-heading">Expense History</h2>
           <p>Your submitted work expenses will appear here.</p>
         </div>
-        <span className="count-badge">0 expenses</span>
+        <span className="count-badge">
+          {expenseCount} {expenseCount === 1 ? 'expense' : 'expenses'}
+        </span>
       </div>
 
       <div className="empty-state">
@@ -36,8 +38,12 @@ export const ExpensesView = ({ onAddExpense }) => (
           <img src={emptyReceiptIcon} alt="" aria-hidden="true" />
         </span>
         <div>
-          <h3>No expenses yet</h3>
-          <p>Once an expense is added, it will be listed in this workspace.</p>
+          <h3>{expenseCount === 0 ? 'No expenses yet' : 'Expense saved'}</h3>
+          <p>
+            {expenseCount === 0
+              ? 'Once an expense is added, it will be listed in this workspace.'
+              : `${expenseCount} ${expenseCount === 1 ? 'expense is' : 'expenses are'} ready for review.`}
+          </p>
         </div>
       </div>
     </section>

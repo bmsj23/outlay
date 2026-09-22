@@ -8,10 +8,11 @@ const initialFormValues = {
   amount: '',
 }
 
-export const ExpenseFormDialog = ({ onClose }) => {
+export const ExpenseFormDialog = ({ onAddExpense, onClose }) => {
   const dialogRef = useRef(null)
   const descriptionInputRef = useRef(null)
   const [formValues, setFormValues] = useState(initialFormValues)
+  const [errors, setErrors] = useState({})
 
   useEffect(() => {
     const dialog = dialogRef.current
@@ -36,6 +37,52 @@ export const ExpenseFormDialog = ({ onClose }) => {
       ...currentValues,
       [name]: value,
     }))
+
+    setErrors((currentErrors) => {
+      if (!currentErrors[name]) return currentErrors
+
+      const nextErrors = { ...currentErrors }
+      delete nextErrors[name]
+      return nextErrors
+    })
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+
+    const description = formValues.description.trim()
+    const amount = Number(formValues.amount)
+    const nextErrors = {}
+
+    if (!description) {
+      nextErrors.description = 'Enter an expense description.'
+    }
+
+    if (!formValues.date) {
+      nextErrors.date = 'Select the transaction date.'
+    }
+
+    if (
+      !formValues.amount.trim() ||
+      !Number.isFinite(amount) ||
+      amount <= 0
+    ) {
+      nextErrors.amount = 'Enter an amount greater than zero.'
+    }
+
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors)
+      event.currentTarget.elements.namedItem(Object.keys(nextErrors)[0])?.focus()
+      return
+    }
+
+    setFormValues(initialFormValues)
+    setErrors({})
+    onAddExpense({
+      date: formValues.date,
+      description,
+      amount,
+    })
   }
 
   const handleCancel = (event) => {
@@ -76,10 +123,7 @@ export const ExpenseFormDialog = ({ onClose }) => {
           </button>
         </header>
 
-        <form
-          className="expense-form"
-          onSubmit={(event) => event.preventDefault()}
-        >
+        <form className="expense-form" noValidate onSubmit={handleSubmit}>
           <div className="form-field form-field-description">
             <label htmlFor="expense-description">Description</label>
             <input
@@ -90,9 +134,18 @@ export const ExpenseFormDialog = ({ onClose }) => {
               value={formValues.description}
               placeholder="e.g. Client lunch meeting"
               autoComplete="off"
+              aria-invalid={Boolean(errors.description)}
+              aria-describedby="expense-description-message"
               onChange={handleInputChange}
             />
-            <p>Brief description of the work-related expense.</p>
+            <p
+              id="expense-description-message"
+              className="field-message"
+              data-error={Boolean(errors.description)}
+            >
+              {errors.description ||
+                'Brief description of the work-related expense.'}
+            </p>
           </div>
 
           <div className="form-field">
@@ -102,9 +155,17 @@ export const ExpenseFormDialog = ({ onClose }) => {
               name="date"
               type="date"
               value={formValues.date}
+              aria-invalid={Boolean(errors.date)}
+              aria-describedby="expense-date-message"
               onChange={handleInputChange}
             />
-            <p>Transaction date</p>
+            <p
+              id="expense-date-message"
+              className="field-message"
+              data-error={Boolean(errors.date)}
+            >
+              {errors.date || 'Transaction date'}
+            </p>
           </div>
 
           <div className="form-field">
@@ -120,11 +181,19 @@ export const ExpenseFormDialog = ({ onClose }) => {
                 inputMode="decimal"
                 value={formValues.amount}
                 placeholder="0.00"
+                aria-invalid={Boolean(errors.amount)}
+                aria-describedby="expense-amount-message"
                 onChange={handleInputChange}
               />
               <span className="currency-suffix">PHP</span>
             </div>
-            <p>Philippine Peso (PHP)</p>
+            <p
+              id="expense-amount-message"
+              className="field-message"
+              data-error={Boolean(errors.amount)}
+            >
+              {errors.amount || 'Philippine Peso (PHP)'}
+            </p>
           </div>
 
           <div className="expense-form-actions">
@@ -138,7 +207,6 @@ export const ExpenseFormDialog = ({ onClose }) => {
             <button
               className="form-button form-button-primary"
               type="submit"
-              disabled
             >
               <img src={plusIcon} alt="" aria-hidden="true" />
               Add Expense
