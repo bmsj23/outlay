@@ -10,17 +10,27 @@ const formatDateForInput = (date) => {
   return `${year}-${month}-${day}`
 }
 
-const createInitialFormValues = () => ({
-  description: '',
-  date: formatDateForInput(new Date()),
-  amount: '',
-})
+const createInitialFormValues = (expense) =>
+  expense
+    ? {
+        description: expense.description,
+        date: expense.date,
+        amount: String(expense.amount),
+      }
+    : {
+        description: '',
+        date: formatDateForInput(new Date()),
+        amount: '',
+      }
 
-export const ExpenseFormDialog = ({ onAddExpense, onClose }) => {
+export const ExpenseFormDialog = ({ expense, onClose, onSubmitExpense }) => {
   const dialogRef = useRef(null)
   const descriptionInputRef = useRef(null)
-  const [formValues, setFormValues] = useState(createInitialFormValues)
+  const [formValues, setFormValues] = useState(() =>
+    createInitialFormValues(expense),
+  )
   const [errors, setErrors] = useState({})
+  const isEditing = Boolean(expense)
 
   useEffect(() => {
     const dialog = dialogRef.current
@@ -84,9 +94,9 @@ export const ExpenseFormDialog = ({ onAddExpense, onClose }) => {
       return
     }
 
-    setFormValues(createInitialFormValues())
+    setFormValues(createInitialFormValues(expense))
     setErrors({})
-    onAddExpense({
+    onSubmitExpense({
       date: formValues.date,
       description,
       amount,
@@ -118,13 +128,19 @@ export const ExpenseFormDialog = ({ onAddExpense, onClose }) => {
 
         <header className="expense-dialog-header">
           <div>
-            <h2 id="expense-dialog-title">Add Expense</h2>
-            <p id="expense-dialog-description">Log a new work expense.</p>
+            <h2 id="expense-dialog-title">
+              {isEditing ? 'Edit Expense' : 'Add Expense'}
+            </h2>
+            <p id="expense-dialog-description">
+              {isEditing
+                ? 'Update this recorded expense.'
+                : 'Log a new work expense.'}
+            </p>
           </div>
           <button
             className="dialog-close-button"
             type="button"
-            aria-label="Close Add Expense"
+            aria-label={`Close ${isEditing ? 'Edit' : 'Add'} Expense`}
             onClick={onClose}
           >
             <img src={closeIcon} alt="" aria-hidden="true" />
@@ -221,8 +237,10 @@ export const ExpenseFormDialog = ({ onAddExpense, onClose }) => {
               className="form-button form-button-primary"
               type="submit"
             >
-              <img src={plusIcon} alt="" aria-hidden="true" />
-              Add Expense
+              {isEditing ? null : (
+                <img src={plusIcon} alt="" aria-hidden="true" />
+              )}
+              {isEditing ? 'Save Changes' : 'Add Expense'}
             </button>
           </div>
         </form>

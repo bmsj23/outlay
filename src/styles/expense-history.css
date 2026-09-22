@@ -336,7 +336,44 @@
 
 .expense-detail-actions {
   display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.form-button-danger-solid {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.form-button-danger-solid:hover {
+  background: #b91c1c;
+}
+
+.expense-delete-confirmation {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #fed7d2;
+  border-radius: var(--radius-lg);
+  background: #fff8f7;
+}
+
+.expense-delete-confirmation h3 {
+  margin: 0;
+  color: #7a271a;
+  font-size: 0.95rem;
+}
+
+.expense-delete-confirmation p {
+  margin-top: 0.2rem;
+  color: #8a3b31;
+  font-size: 0.78rem;
+}
+
+.expense-delete-actions {
+  display: flex;
   justify-content: flex-end;
+  gap: 0.65rem;
 }
 
 @media (max-width: 47.99rem) {
@@ -344,7 +381,14 @@
     padding: 1rem;
   }
 
-  .expense-detail-actions .form-button {
+  .expense-detail-actions,
+  .expense-delete-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .expense-detail-actions .form-button,
+  .expense-delete-actions .form-button {
     width: 100%;
   }
 }

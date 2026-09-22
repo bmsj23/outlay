@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import closeIcon from '../assets/icons/close.svg'
 
 const currencyFormatter = new Intl.NumberFormat('en-PH', {
@@ -13,9 +13,18 @@ const dateFormatter = new Intl.DateTimeFormat('en-PH', {
 const formatExpenseDate = (date) =>
   dateFormatter.format(new Date(`${date}T00:00:00`))
 
-export const ExpenseDetailDialog = ({ expense, onClose }) => {
+export const ExpenseDetailDialog = ({
+  expense,
+  onClose,
+  onDelete,
+  onEdit,
+}) => {
   const dialogRef = useRef(null)
   const closeButtonRef = useRef(null)
+  const deleteButtonRef = useRef(null)
+  const keepExpenseButtonRef = useRef(null)
+  const shouldRestoreDeleteFocusRef = useRef(false)
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false)
 
   useEffect(() => {
     const dialog = dialogRef.current
@@ -33,9 +42,28 @@ export const ExpenseDetailDialog = ({ expense, onClose }) => {
     }
   }, [])
 
+  useEffect(() => {
+    if (isConfirmingDelete) {
+      keepExpenseButtonRef.current?.focus()
+    } else if (shouldRestoreDeleteFocusRef.current) {
+      deleteButtonRef.current?.focus()
+      shouldRestoreDeleteFocusRef.current = false
+    }
+  }, [isConfirmingDelete])
+
+  const handleCancelDelete = () => {
+    shouldRestoreDeleteFocusRef.current = true
+    setIsConfirmingDelete(false)
+  }
+
   const handleCancel = (event) => {
     event.preventDefault()
-    onClose()
+
+    if (isConfirmingDelete) {
+      handleCancelDelete()
+    } else {
+      onClose()
+    }
   }
 
   const handleBackdropClick = (event) => {
@@ -89,15 +117,53 @@ export const ExpenseDetailDialog = ({ expense, onClose }) => {
             </div>
           </dl>
 
-          <div className="expense-detail-actions">
-            <button
-              className="form-button form-button-secondary"
-              type="button"
-              onClick={onClose}
+          {isConfirmingDelete ? (
+            <div
+              className="expense-delete-confirmation"
+              role="alert"
+              aria-live="assertive"
             >
-              Close
-            </button>
-          </div>
+              <div>
+                <h3>Delete this expense?</h3>
+                <p>This action cannot be undone.</p>
+              </div>
+              <div className="expense-delete-actions">
+                <button
+                  className="form-button form-button-secondary"
+                  ref={keepExpenseButtonRef}
+                  type="button"
+                  onClick={handleCancelDelete}
+                >
+                  Keep Expense
+                </button>
+                <button
+                  className="form-button form-button-danger-solid"
+                  type="button"
+                  onClick={() => onDelete(expense.id)}
+                >
+                  Delete Expense
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="expense-detail-actions">
+              <button
+                className="form-button form-button-secondary"
+                type="button"
+                onClick={() => onEdit(expense.id)}
+              >
+                Edit Expense
+              </button>
+              <button
+                className="form-button form-button-danger-solid"
+                ref={deleteButtonRef}
+                type="button"
+                onClick={() => setIsConfirmingDelete(true)}
+              >
+                Delete
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </dialog>

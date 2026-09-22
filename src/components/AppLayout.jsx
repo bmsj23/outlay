@@ -9,14 +9,18 @@ import { ViewSwitcher } from './ViewSwitcher.jsx'
 
 export const AppLayout = ({
   activeView,
+  editingExpense,
   expenses,
   isExpenseFormOpen,
   selectedExpense,
   onAddExpense,
   onCloseExpenseDetails,
   onCloseExpenseForm,
+  onDeleteExpense,
+  onEditExpense,
   onOpenExpenseForm,
   onSelectExpense,
+  onUpdateExpense,
   onViewChange,
 }) => {
   const isExpensesView = activeView === 'expenses'
@@ -65,15 +69,20 @@ export const AppLayout = ({
 
       {isExpenseFormOpen ? (
         <ExpenseFormDialog
-          onAddExpense={onAddExpense}
+          expense={editingExpense}
           onClose={onCloseExpenseForm}
+          onSubmitExpense={
+            editingExpense ? onUpdateExpense : onAddExpense
+          }
         />
       ) : null}
 
-      {selectedExpense ? (
+      {selectedExpense && !isExpenseFormOpen ? (
         <ExpenseDetailDialog
           expense={selectedExpense}
           onClose={onCloseExpenseDetails}
+          onDelete={onDeleteExpense}
+          onEdit={onEditExpense}
         />
       ) : null}
     </div>
