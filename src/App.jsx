@@ -1,11 +1,5 @@
 import { useState } from 'react'
-import { AddExpenseButton } from './components/AddExpenseButton.jsx'
-import { AppFooter } from './components/AppFooter.jsx'
-import { AppHeader } from './components/AppHeader.jsx'
-import { ExpenseFormDialog } from './components/ExpenseFormDialog.jsx'
-import { ViewSwitcher } from './components/ViewSwitcher.jsx'
-import { ExpensesView } from './views/ExpensesView.jsx'
-import { WeeklySummaryView } from './views/WeeklySummaryView.jsx'
+import { AppLayout } from './components/AppLayout.jsx'
 import './App.css'
 import './styles/expense-entry.css'
 
@@ -13,7 +7,10 @@ const App = () => {
   const [activeView, setActiveView] = useState('expenses')
   const [expenses, setExpenses] = useState([])
   const [isExpenseFormOpen, setIsExpenseFormOpen] = useState(false)
-  const isExpensesView = activeView === 'expenses'
+
+  const handleViewChange = (nextView) => setActiveView(nextView)
+  const handleOpenExpenseForm = () => setIsExpenseFormOpen(true)
+  const handleCloseExpenseForm = () => setIsExpenseFormOpen(false)
 
   const handleAddExpense = (expense) => {
     setExpenses((currentExpenses) => [
@@ -23,57 +20,19 @@ const App = () => {
         ...expense,
       },
     ])
-    setIsExpenseFormOpen(false)
+    handleCloseExpenseForm()
   }
 
   return (
-    <div className="app-shell">
-      <AppHeader />
-
-      <main className="app-container main-content" id="main-content">
-        <div className="page-heading">
-          <div className="page-intro">
-            <h1>{isExpensesView ? 'Expenses' : 'Weekly Summary'}</h1>
-            <p>
-              {isExpensesView
-                ? 'Report and review your submitted work expenses.'
-                : 'Review total work expenses by week for the selected year.'}
-            </p>
-          </div>
-
-          <div className="page-actions">
-            {isExpensesView ? (
-              <AddExpenseButton
-                className="desktop-add-expense"
-                onClick={() => setIsExpenseFormOpen(true)}
-              />
-            ) : null}
-            <ViewSwitcher
-              activeView={activeView}
-              onViewChange={setActiveView}
-            />
-          </div>
-        </div>
-
-        {isExpensesView ? (
-          <ExpensesView
-            expenseCount={expenses.length}
-            onAddExpense={() => setIsExpenseFormOpen(true)}
-          />
-        ) : (
-          <WeeklySummaryView />
-        )}
-      </main>
-
-      <AppFooter />
-
-      {isExpenseFormOpen ? (
-        <ExpenseFormDialog
-          onAddExpense={handleAddExpense}
-          onClose={() => setIsExpenseFormOpen(false)}
-        />
-      ) : null}
-    </div>
+    <AppLayout
+      activeView={activeView}
+      expenses={expenses}
+      isExpenseFormOpen={isExpenseFormOpen}
+      onAddExpense={handleAddExpense}
+      onCloseExpenseForm={handleCloseExpenseForm}
+      onOpenExpenseForm={handleOpenExpenseForm}
+      onViewChange={handleViewChange}
+    />
   )
 }
 
