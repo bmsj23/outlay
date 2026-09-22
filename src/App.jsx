@@ -10,6 +10,10 @@ const App = () => {
   const [activeView, setActiveView] = useState('expenses')
   const [expenses, setExpenses] = useState(loadExpenses)
   const [isExpenseFormOpen, setIsExpenseFormOpen] = useState(false)
+  const [selectedExpenseId, setSelectedExpenseId] = useState(null)
+
+  const selectedExpense =
+    expenses.find((expense) => expense.id === selectedExpenseId) ?? null
 
   useEffect(() => {
     saveExpenses(expenses)
@@ -18,6 +22,8 @@ const App = () => {
   const handleViewChange = (nextView) => setActiveView(nextView)
   const handleOpenExpenseForm = () => setIsExpenseFormOpen(true)
   const handleCloseExpenseForm = () => setIsExpenseFormOpen(false)
+  const handleSelectExpense = (expenseId) => setSelectedExpenseId(expenseId)
+  const handleCloseExpenseDetails = () => setSelectedExpenseId(null)
 
   const handleAddExpense = (expense) => {
     setExpenses((currentExpenses) => [
@@ -35,9 +41,12 @@ const App = () => {
       activeView={activeView}
       expenses={expenses}
       isExpenseFormOpen={isExpenseFormOpen}
+      selectedExpense={selectedExpense}
       onAddExpense={handleAddExpense}
+      onCloseExpenseDetails={handleCloseExpenseDetails}
       onCloseExpenseForm={handleCloseExpenseForm}
       onOpenExpenseForm={handleOpenExpenseForm}
+      onSelectExpense={handleSelectExpense}
       onViewChange={handleViewChange}
     />
   )

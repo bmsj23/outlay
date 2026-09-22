@@ -32,7 +32,11 @@ const isDateInCurrentWeek = (date) => {
   return expenseDate >= weekStart && expenseDate < weekEnd
 }
 
-export const ExpensesView = ({ expenses, onAddExpense }) => {
+export const ExpensesView = ({
+  expenses,
+  onAddExpense,
+  onSelectExpense,
+}) => {
   const [searchQuery, setSearchQuery] = useState('')
   const expenseCount = expenses.length
   const normalizedSearchQuery = searchQuery.trim().toLocaleLowerCase()
@@ -58,6 +62,13 @@ export const ExpensesView = ({ expenses, onAddExpense }) => {
       isDateInCurrentWeek(expense.date) ? total + expense.amount : total,
     0,
   )
+
+  const handleExpenseKeyDown = (event, expenseId) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      onSelectExpense(expenseId)
+    }
+  }
 
   return (
     <section
@@ -162,7 +173,16 @@ export const ExpensesView = ({ expenses, onAddExpense }) => {
                 </thead>
                 <tbody>
                   {orderedExpenses.map((expense) => (
-                    <tr key={expense.id}>
+                    <tr
+                      key={expense.id}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`View ${expense.description} expense details`}
+                      onClick={() => onSelectExpense(expense.id)}
+                      onKeyDown={(event) =>
+                        handleExpenseKeyDown(event, expense.id)
+                      }
+                    >
                       <td>{formatExpenseDate(expense.date)}</td>
                       <td>{expense.description}</td>
                       <td>{currencyFormatter.format(expense.amount)}</td>
@@ -175,15 +195,24 @@ export const ExpensesView = ({ expenses, onAddExpense }) => {
             <ul className="expense-list" aria-label="Expense history">
               {orderedExpenses.map((expense) => (
                 <li className="expense-list-item" key={expense.id}>
-                  <div>
-                    <p className="expense-description">{expense.description}</p>
-                    <p className="expense-date">
-                      {formatExpenseDate(expense.date)}
+                  <button
+                    className="expense-list-button"
+                    type="button"
+                    aria-label={`View ${expense.description} expense details`}
+                    onClick={() => onSelectExpense(expense.id)}
+                  >
+                    <div>
+                      <p className="expense-description">
+                        {expense.description}
+                      </p>
+                      <p className="expense-date">
+                        {formatExpenseDate(expense.date)}
+                      </p>
+                    </div>
+                    <p className="expense-amount">
+                      {currencyFormatter.format(expense.amount)}
                     </p>
-                  </div>
-                  <p className="expense-amount">
-                    {currencyFormatter.format(expense.amount)}
-                  </p>
+                  </button>
                 </li>
               ))}
             </ul>

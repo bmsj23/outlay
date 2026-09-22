@@ -3,6 +3,7 @@ import { WeeklySummaryView } from '../views/WeeklySummaryView.jsx'
 import { AddExpenseButton } from './AddExpenseButton.jsx'
 import { AppFooter } from './AppFooter.jsx'
 import { AppHeader } from './AppHeader.jsx'
+import { ExpenseDetailDialog } from './ExpenseDetailDialog.jsx'
 import { ExpenseFormDialog } from './ExpenseFormDialog.jsx'
 import { ViewSwitcher } from './ViewSwitcher.jsx'
 
@@ -10,9 +11,12 @@ export const AppLayout = ({
   activeView,
   expenses,
   isExpenseFormOpen,
+  selectedExpense,
   onAddExpense,
+  onCloseExpenseDetails,
   onCloseExpenseForm,
   onOpenExpenseForm,
+  onSelectExpense,
   onViewChange,
 }) => {
   const isExpensesView = activeView === 'expenses'
@@ -50,6 +54,7 @@ export const AppLayout = ({
           <ExpensesView
             expenses={expenses}
             onAddExpense={onOpenExpenseForm}
+            onSelectExpense={onSelectExpense}
           />
         ) : (
           <WeeklySummaryView expenses={expenses} />
@@ -62,6 +67,13 @@ export const AppLayout = ({
         <ExpenseFormDialog
           onAddExpense={onAddExpense}
           onClose={onCloseExpenseForm}
+        />
+      ) : null}
+
+      {selectedExpense ? (
+        <ExpenseDetailDialog
+          expense={selectedExpense}
+          onClose={onCloseExpenseDetails}
         />
       ) : null}
     </div>
