@@ -176,6 +176,10 @@
   position: relative;
 }
 
+.date-picker-native-input {
+  color-scheme: light;
+}
+
 .date-picker-trigger {
   display: flex;
   width: 100%;
@@ -250,11 +254,44 @@
   margin-bottom: 0.2rem;
 }
 
-.date-picker-header p {
-  margin: 0;
-  font-size: 0.78rem;
+.date-picker-month-year {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.date-picker-month-year select {
+  min-width: 0;
+  padding: 0.25rem 1.2rem 0.25rem 0.35rem;
+  border: 1px solid transparent;
+  border-radius: 0.45rem;
+  appearance: none;
+  background:
+    linear-gradient(45deg, transparent 50%, var(--color-text-muted) 50%)
+      calc(100% - 0.55rem) 52% / 0.3rem 0.3rem no-repeat,
+    linear-gradient(135deg, var(--color-text-muted) 50%, transparent 50%)
+      calc(100% - 0.35rem) 52% / 0.3rem 0.3rem no-repeat;
+  color: var(--color-text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: -0.015em;
+}
+
+.date-picker-month-year select:first-child {
+  max-width: 6.75rem;
+}
+
+.date-picker-month-year select:last-child {
+  max-width: 4.5rem;
+}
+
+.date-picker-month-year select:hover,
+.date-picker-month-year select:focus-visible {
+  border-color: #fed7aa;
+  outline: none;
+  background-color: #fff7ed;
 }
 
 .date-picker-header > div {

@@ -16,6 +16,10 @@ const monthFormatter = new Intl.DateTimeFormat('en-PH', {
   year: 'numeric',
 })
 
+const monthNameFormatter = new Intl.DateTimeFormat('en-PH', {
+  month: 'short',
+})
+
 const selectedDateFormatter = new Intl.DateTimeFormat('en-PH', {
   month: 'short',
   day: 'numeric',
@@ -78,6 +82,7 @@ export const DatePicker = ({
   const today = useMemo(() => new Date(), [])
   const pickerRef = useRef(null)
   const toggleRef = useRef(null)
+  const preserveHeaderFocusRef = useRef(false)
   const [isOpen, setIsOpen] = useState(false)
   const [visibleMonth, setVisibleMonth] = useState(() =>
     createMonthStart(fromDateKey(value) ?? today),
@@ -85,8 +90,35 @@ export const DatePicker = ({
   const [focusedDateKey, setFocusedDateKey] = useState(
     value || toDateKey(today),
   )
+  const isIOS = useMemo(
+    () =>
+      typeof navigator !== 'undefined' &&
+      (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)),
+    [],
+  )
   const selectedDate = fromDateKey(value)
   const todayKey = toDateKey(today)
+  const pickerYears = useMemo(() => {
+    const currentYear = today.getFullYear()
+    const selectedYear = selectedDate?.getFullYear() ?? currentYear
+    const visibleYear = visibleMonth.getFullYear()
+    const firstYear = Math.min(
+      currentYear - 10,
+      selectedYear - 1,
+      visibleYear - 1,
+    )
+    const lastYear = Math.max(
+      currentYear + 5,
+      selectedYear + 1,
+      visibleYear + 1,
+    )
+
+    return Array.from(
+      { length: lastYear - firstYear + 1 },
+      (_, index) => firstYear + index,
+    )
+  }, [selectedDate, today, visibleMonth])
 
   const calendarDays = useMemo(() => {
     const gridStart = addDays(visibleMonth, -visibleMonth.getDay())
@@ -108,6 +140,10 @@ export const DatePicker = ({
 
   useEffect(() => {
     if (!isOpen) return
+    if (preserveHeaderFocusRef.current) {
+      preserveHeaderFocusRef.current = false
+      return
+    }
     pickerRef.current
       ?.querySelector(`[data-date="${focusedDateKey}"]`)
       ?.focus()
@@ -151,6 +187,16 @@ export const DatePicker = ({
     setFocusedDateKey(toDateKey(nextDate))
   }
 
+  const handleMonthYearChange = (month, year) => {
+    const focusedDate = fromDateKey(focusedDateKey) ?? visibleMonth
+    const lastDay = new Date(year, month + 1, 0).getDate()
+    const nextDate = new Date(year, month, Math.min(focusedDate.getDate(), lastDay))
+
+    preserveHeaderFocusRef.current = true
+    setVisibleMonth(createMonthStart(nextDate))
+    setFocusedDateKey(toDateKey(nextDate))
+  }
+
   const handleDayKeyDown = (event, date) => {
     let nextDate = null
 
@@ -175,6 +221,24 @@ export const DatePicker = ({
     event.preventDefault()
     setVisibleMonth(createMonthStart(nextDate))
     setFocusedDateKey(toDateKey(nextDate))
+  }
+
+  if (isIOS) {
+    return (
+      <div className="date-picker date-picker-native">
+        <input
+          className="date-picker-native-input"
+          id="expense-date"
+          name="date"
+          type="date"
+          value={value}
+          aria-label="Expense date"
+          aria-invalid={invalid}
+          aria-describedby={describedBy}
+          onChange={(event) => onChange(event.target.value)}
+        />
+      </div>
+    )
   }
 
   return (
@@ -218,7 +282,40 @@ export const DatePicker = ({
           }}
         >
           <div className="date-picker-header">
-            <p aria-live="polite">{monthFormatter.format(visibleMonth)}</p>
+            <div className="date-picker-month-year" aria-label="Choose month and year">
+              <select
+                aria-label="Choose month"
+                value={visibleMonth.getMonth()}
+                onChange={(event) =>
+                  handleMonthYearChange(
+                    Number(event.target.value),
+                    visibleMonth.getFullYear(),
+                  )
+                }
+              >
+                {Array.from({ length: 12 }, (_, month) => (
+                  <option key={month} value={month}>
+                    {monthNameFormatter.format(new Date(2000, month, 1))}
+                  </option>
+                ))}
+              </select>
+              <select
+                aria-label="Choose year"
+                value={visibleMonth.getFullYear()}
+                onChange={(event) =>
+                  handleMonthYearChange(
+                    visibleMonth.getMonth(),
+                    Number(event.target.value),
+                  )
+                }
+              >
+                {pickerYears.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div>
               <button
                 type="button"
