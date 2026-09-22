@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import closeIcon from '../assets/icons/close.svg'
+import { ExpenseSortButton } from './ExpenseSortButton.jsx'
 
 const currencyFormatter = new Intl.NumberFormat('en-PH', {
   style: 'currency',
@@ -27,6 +28,9 @@ const formatExpenseDate = (date) =>
 export const WeeklyDetailDialog = ({ expenses, week, onClose }) => {
   const dialogRef = useRef(null)
   const closeButtonRef = useRef(null)
+  const [sortOrder, setSortOrder] = useState('newest')
+  const orderedExpenses =
+    sortOrder === 'newest' ? [...expenses].reverse() : expenses
 
   useEffect(() => {
     const dialog = dialogRef.current
@@ -97,24 +101,35 @@ export const WeeklyDetailDialog = ({ expenses, week, onClose }) => {
           </div>
 
           {expenses.length > 0 ? (
-            <ul className="weekly-detail-expenses">
-              {expenses.map((expense) => (
-                <li key={expense.id}>
-                  <div>
-                    <strong>{expense.description}</strong>
-                    <span>{formatExpenseDate(expense.date)}</span>
-                  </div>
-                  <p>{currencyFormatter.format(expense.amount)}</p>
-                </li>
-              ))}
-            </ul>
+            <div className="weekly-detail-expense-group">
+              <div className="weekly-detail-toolbar">
+                <ExpenseSortButton
+                  sortOrder={sortOrder}
+                  onToggle={() =>
+                    setSortOrder((currentOrder) =>
+                      currentOrder === 'newest' ? 'oldest' : 'newest',
+                    )
+                  }
+                />
+              </div>
+              <ul className="weekly-detail-expenses">
+                {orderedExpenses.map((expense) => (
+                  <li key={expense.id}>
+                    <div>
+                      <strong>{expense.description}</strong>
+                      <span>{formatExpenseDate(expense.date)}</span>
+                    </div>
+                    <p>{currencyFormatter.format(expense.amount)}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ) : (
             <div className="weekly-detail-empty">
               <strong>No expenses this week</strong>
               <p>This week has no recorded spending.</p>
             </div>
           )}
-
         </div>
       </div>
     </dialog>

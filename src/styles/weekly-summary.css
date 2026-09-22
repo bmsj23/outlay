@@ -624,6 +624,16 @@
   text-transform: none !important;
 }
 
+.weekly-detail-expense-group {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.weekly-detail-toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .weekly-detail-expenses {
   margin: 0;
   padding: 0;
@@ -694,6 +704,11 @@
   .weekly-detail-body {
     max-height: calc(92svh - 5.5rem);
     padding: 1rem;
+  }
+
+  .weekly-detail-toolbar .expense-sort-button {
+    width: 100%;
+    justify-content: center;
   }
 
 }

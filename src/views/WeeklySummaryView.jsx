@@ -37,9 +37,6 @@ export const WeeklySummaryView = ({ expenses }) => {
             expense.date >= selectedWeek.startDate &&
             expense.date <= selectedWeek.endDate,
         )
-        .sort((firstExpense, secondExpense) =>
-          secondExpense.date.localeCompare(firstExpense.date),
-        )
     : []
 
   const handleWeekKeyDown = (event, weekNumber) => {

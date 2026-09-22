@@ -178,6 +178,22 @@
   font-weight: 600;
 }
 
+.field-message-with-count {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.field-message-with-count > span:first-child {
+  min-width: 0;
+}
+
+.field-message-with-count > span:last-child {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+}
+
 .amount-input {
   position: relative;
 }

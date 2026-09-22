@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import closeIcon from '../assets/icons/close.svg'
 import plusIcon from '../assets/icons/plus.svg'
 
+const DESCRIPTION_MAX_LENGTH = 120
+
 const formatDateForInput = (date) => {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -74,6 +76,8 @@ export const ExpenseFormDialog = ({ expense, onClose, onSubmitExpense }) => {
 
     if (!description) {
       nextErrors.description = 'Enter an expense description.'
+    } else if (description.length > DESCRIPTION_MAX_LENGTH) {
+      nextErrors.description = `Keep the description within ${DESCRIPTION_MAX_LENGTH} characters.`
     }
 
     if (!formValues.date) {
@@ -156,21 +160,26 @@ export const ExpenseFormDialog = ({ expense, onClose, onSubmitExpense }) => {
               name="description"
               type="text"
               value={formValues.description}
+              maxLength={DESCRIPTION_MAX_LENGTH}
               placeholder="e.g. Client lunch meeting"
               autoComplete="off"
               aria-invalid={Boolean(errors.description)}
               aria-describedby="expense-description-message"
               onChange={handleInputChange}
             />
-            <p
+            <div
               id="expense-description-message"
-              className="field-message"
+              className="field-message field-message-with-count"
               data-error={Boolean(errors.description)}
-              aria-live="polite"
             >
-              {errors.description ||
-                'Brief description of the work-related expense.'}
-            </p>
+              <span aria-live="polite">
+                {errors.description ||
+                  'Brief description of the work-related expense.'}
+              </span>
+              <span aria-label={`${formValues.description.length} of ${DESCRIPTION_MAX_LENGTH} characters used`}>
+                {formValues.description.length}/{DESCRIPTION_MAX_LENGTH}
+              </span>
+            </div>
           </div>
 
           <div className="form-field">

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { AddExpenseButton } from '../components/AddExpenseButton.jsx'
+import { ExpenseSortButton } from '../components/ExpenseSortButton.jsx'
 import closeIcon from '../assets/icons/close.svg'
 import emptyReceiptIcon from '../assets/icons/empty-receipt.svg'
 import searchIcon from '../assets/icons/search.svg'
@@ -135,21 +136,14 @@ export const ExpensesView = ({
                 </button>
               ) : null}
             </div>
-            <button
-              className="expense-sort-button"
-              type="button"
-              aria-label={`Sort by ${sortOrder === 'newest' ? 'oldest' : 'newest'} added first`}
-              onClick={() =>
+            <ExpenseSortButton
+              sortOrder={sortOrder}
+              onToggle={() =>
                 setSortOrder((currentOrder) =>
                   currentOrder === 'newest' ? 'oldest' : 'newest',
                 )
               }
-            >
-              <span>Sort</span>
-              <strong>
-                {sortOrder === 'newest' ? 'Newest added' : 'Oldest added'}
-              </strong>
-            </button>
+            />
           </div>
         ) : null}
 
