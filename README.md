@@ -35,7 +35,7 @@ npm run preview
 
 ## Features
 
-- Add expenses with a description, custom date picker, and positive PHP amount
+- Add expenses with a description, custom date picker (for non-iOS devices), and positive PHP amount
 - Validate required fields, positive amounts, and the 120-character description limit
 - Review expenses in a desktop table or mobile list
 - Search descriptions with case-insensitive partial matching
