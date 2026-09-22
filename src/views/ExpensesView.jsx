@@ -52,7 +52,7 @@ export const ExpensesView = ({ expenses, onAddExpense }) => {
     (total, expense) => total + expense.amount,
     0,
   )
-  
+
   const currentWeekTotal = expenses.reduce(
     (total, expense) =>
       isDateInCurrentWeek(expense.date) ? total + expense.amount : total,
@@ -94,36 +94,37 @@ export const ExpensesView = ({ expenses, onAddExpense }) => {
             <h2 id="history-heading">Expense History</h2>
             <p>Your submitted work expenses will appear here.</p>
           </div>
-          <div className="history-controls">
-            {expenseCount > 0 ? (
-              <div className="expense-search">
-                <img src={searchIcon} alt="" aria-hidden="true" />
-                <input
-                  type="search"
-                  value={searchQuery}
-                  aria-label="Search expenses by description"
-                  placeholder="Search expenses"
-                  onChange={(event) => setSearchQuery(event.target.value)}
-                />
-                {searchQuery ? (
-                  <button
-                    type="button"
-                    aria-label="Clear expense search"
-                    onClick={() => setSearchQuery('')}
-                  >
-                    <img src={closeIcon} alt="" aria-hidden="true" />
-                  </button>
-                ) : null}
-              </div>
-            ) : null}
-            <span className="count-badge">
-              {normalizedSearchQuery
-                ? `${filteredExpenses.length} of ${expenseCount}`
-                : expenseCount}{' '}
-              {expenseCount === 1 ? 'expense' : 'expenses'}
-            </span>
-          </div>
+          <span className="count-badge">
+            {normalizedSearchQuery
+              ? `${filteredExpenses.length} of ${expenseCount}`
+              : expenseCount}{' '}
+            {expenseCount === 1 ? 'expense' : 'expenses'}
+          </span>
         </div>
+
+        {expenseCount > 0 ? (
+          <div className="history-search-row">
+            <div className="expense-search">
+              <img src={searchIcon} alt="" aria-hidden="true" />
+              <input
+                type="search"
+                value={searchQuery}
+                aria-label="Search expenses by description"
+                placeholder="Search expenses by description..."
+                onChange={(event) => setSearchQuery(event.target.value)}
+              />
+              {searchQuery ? (
+                <button
+                  type="button"
+                  aria-label="Clear expense search"
+                  onClick={() => setSearchQuery('')}
+                >
+                  <img src={closeIcon} alt="" aria-hidden="true" />
+                </button>
+              ) : null}
+            </div>
+          </div>
+        ) : null}
 
         {expenseCount === 0 ? (
           <div className="empty-state">

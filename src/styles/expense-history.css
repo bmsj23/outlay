@@ -1,13 +1,11 @@
-.history-controls {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.75rem;
+.history-search-row {
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .expense-search {
   position: relative;
-  width: min(16rem, 32vw);
+  width: 100%;
 }
 
 .expense-search > img {
@@ -149,20 +147,23 @@
 }
 
 @media (max-width: 47.99rem) {
-  .section-heading {
-    flex-direction: column;
-    gap: 0.75rem;
+  .ledger-card {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
   }
 
-  .history-controls {
-    width: 100%;
-    justify-content: space-between;
+  .ledger-card .section-heading {
+    padding: 0;
+    border-bottom: 0;
+    margin-bottom: 0.75rem;
   }
 
-  .expense-search {
-    width: auto;
-    min-width: 0;
-    flex: 1;
+  .history-search-row {
+    padding: 0;
+    border-bottom: 0;
+    margin-bottom: 0.75rem;
   }
 
   .expense-table-wrap {
@@ -171,6 +172,18 @@
 
   .expense-list {
     display: block;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface-raised);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .ledger-card > .empty-state {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface-raised);
+    box-shadow: var(--shadow-sm);
   }
 
   .expense-list-item {
