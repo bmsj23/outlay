@@ -4,6 +4,7 @@ import { loadExpenses, saveExpenses } from './utils/expenseStorage.js'
 import './App.css'
 import './styles/expense-entry.css'
 import './styles/expense-history.css'
+import './styles/weekly-summary.css'
 
 const App = () => {
   const [activeView, setActiveView] = useState('expenses')

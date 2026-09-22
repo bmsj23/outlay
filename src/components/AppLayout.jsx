@@ -52,7 +52,7 @@ export const AppLayout = ({
             onAddExpense={onOpenExpenseForm}
           />
         ) : (
-          <WeeklySummaryView />
+          <WeeklySummaryView expenses={expenses} />
         )}
       </main>
 
