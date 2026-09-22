@@ -215,9 +215,26 @@
   }
 
   .ledger-card .section-heading {
+    position: relative;
+    display: block;
     padding: 0;
     border-bottom: 0;
     margin-bottom: 0.75rem;
+  }
+
+  .ledger-card .section-heading > div {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .ledger-card .section-heading .count-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .ledger-card .section-heading p {
+    max-width: none;
   }
 
   .history-search-row {

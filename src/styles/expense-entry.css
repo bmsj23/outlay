@@ -183,7 +183,15 @@
   min-width: 0;
   min-inline-size: 0;
   box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
   color-scheme: light;
+  text-align: left;
+}
+
+.date-picker-native-input::-webkit-date-and-time-value {
+  height: 1.5em;
+  min-height: 1.5em;
 }
 
 .date-picker-native {
