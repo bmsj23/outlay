@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { AppLayout } from './components/AppLayout.jsx'
 import './App.css'
 import './styles/expense-entry.css'
+import './styles/expense-history.css'
 
 const App = () => {
   const [activeView, setActiveView] = useState('expenses')
