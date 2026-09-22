@@ -61,7 +61,7 @@ export const WeeklyDetailDialog = ({ expenses, week, onClose }) => {
 
   return (
     <dialog
-      className="expense-dialog"
+      className="expense-dialog detail-dialog"
       ref={dialogRef}
       aria-labelledby="weekly-detail-title"
       aria-describedby="weekly-detail-description"

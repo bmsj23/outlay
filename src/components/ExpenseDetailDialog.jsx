@@ -74,7 +74,7 @@ export const ExpenseDetailDialog = ({
 
   return (
     <dialog
-      className="expense-dialog"
+      className="expense-dialog detail-dialog"
       ref={dialogRef}
       aria-labelledby="expense-detail-title"
       aria-describedby="expense-detail-description"
