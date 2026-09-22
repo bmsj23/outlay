@@ -10,15 +10,66 @@
   box-shadow: var(--shadow-sm);
 }
 
-.weekly-context p {
+.weekly-context label {
   color: var(--color-text-muted);
   font-size: 0.75rem;
   font-weight: 600;
 }
 
-.weekly-context strong {
+.weekly-year-control {
+  position: relative;
+  display: inline-flex;
+  min-width: 8.25rem;
+  align-items: center;
+}
+
+.weekly-year-select {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.45rem 2.1rem 0.45rem 2.35rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  appearance: none;
+  background: var(--color-surface-raised);
   color: var(--color-text);
-  font-size: 0.9rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.weekly-year-select:hover {
+  border-color: #fdba74;
+  background: #fffaf7;
+}
+
+.weekly-year-select:focus-visible {
+  border-color: var(--color-primary);
+  outline: 3px solid #fed7aa;
+  outline-offset: 2px;
+}
+
+.weekly-year-icon,
+.weekly-year-chevron {
+  position: absolute;
+  z-index: 1;
+  width: 1rem;
+  height: 1rem;
+  pointer-events: none;
+}
+
+.weekly-year-icon {
+  left: 0.8rem;
+}
+
+.weekly-year-chevron {
+  right: 0.7rem;
+  color: var(--color-text-muted);
 }
 
 .weekly-metric-grid {
@@ -423,6 +474,10 @@
 }
 
 @media (max-width: 47.99rem) {
+  .weekly-year-select {
+    font-size: 1rem;
+  }
+
   .weekly-metric-grid {
     grid-template-columns: 1fr;
     gap: 0.65rem;

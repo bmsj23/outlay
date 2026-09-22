@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import calendarAccentIcon from '../assets/icons/calendar-accent.svg'
+import chevronDownIcon from '../assets/icons/chevron-down.svg'
 import { WeeklyDetailDialog } from '../components/WeeklyDetailDialog.jsx'
 import { aggregateExpensesByWeek } from '../utils/weeklyExpenses.js'
 
@@ -17,8 +19,17 @@ const formatDateRange = (startDate, endDate) =>
   `${dateFormatter.format(new Date(`${startDate}T00:00:00Z`))} - ${dateFormatter.format(new Date(`${endDate}T00:00:00Z`))}`
 
 export const WeeklySummaryView = ({ expenses }) => {
+  const currentYear = new Date().getFullYear()
   const [selectedWeekNumber, setSelectedWeekNumber] = useState(null)
-  const selectedYear = new Date().getFullYear()
+  const [selectedYear, setSelectedYear] = useState(currentYear)
+  const availableYears = [
+    ...new Set([
+      currentYear,
+      ...expenses
+        .map((expense) => Number(expense.date.slice(0, 4)))
+        .filter(Number.isInteger),
+    ]),
+  ].sort((firstYear, secondYear) => secondYear - firstYear)
   const weeks = aggregateExpensesByWeek(expenses, selectedYear)
   const annualTotal = weeks.reduce((total, week) => total + week.total, 0)
   const averagePerWeek = weeks.length > 0 ? annualTotal / weeks.length : 0
@@ -46,6 +57,11 @@ export const WeeklySummaryView = ({ expenses }) => {
     }
   }
 
+  const handleYearChange = (event) => {
+    setSelectedYear(Number(event.target.value))
+    setSelectedWeekNumber(null)
+  }
+
   return (
     <section
       className="view-panel weekly-summary"
@@ -54,8 +70,33 @@ export const WeeklySummaryView = ({ expenses }) => {
       aria-labelledby="weekly-tab"
     >
       <div className="weekly-context">
-        <p>Calendar year</p>
-        <strong>{selectedYear}</strong>
+        <label htmlFor="summary-year">Calendar year</label>
+        <div className="weekly-year-control">
+          <img
+            className="weekly-year-icon"
+            src={calendarAccentIcon}
+            alt=""
+            aria-hidden="true"
+          />
+          <select
+            id="summary-year"
+            className="weekly-year-select"
+            value={selectedYear}
+            onChange={handleYearChange}
+          >
+            {availableYears.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+          <img
+            className="weekly-year-chevron"
+            src={chevronDownIcon}
+            alt=""
+            aria-hidden="true"
+          />
+        </div>
       </div>
 
       <div className="weekly-metric-grid" aria-label="Annual expense overview">
