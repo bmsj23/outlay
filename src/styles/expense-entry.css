@@ -177,7 +177,18 @@
 }
 
 .date-picker-native-input {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-inline-size: 0;
+  box-sizing: border-box;
   color-scheme: light;
+}
+
+.date-picker-native {
+  width: 100%;
+  min-width: 0;
 }
 
 .date-picker-trigger {
