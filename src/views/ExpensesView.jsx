@@ -1,5 +1,8 @@
+import { useState } from 'react'
 import { AddExpenseButton } from '../components/AddExpenseButton.jsx'
+import closeIcon from '../assets/icons/close.svg'
 import emptyReceiptIcon from '../assets/icons/empty-receipt.svg'
+import searchIcon from '../assets/icons/search.svg'
 
 const currencyFormatter = new Intl.NumberFormat('en-PH', {
   style: 'currency',
@@ -30,14 +33,26 @@ const isDateInCurrentWeek = (date) => {
 }
 
 export const ExpensesView = ({ expenses, onAddExpense }) => {
+  const [searchQuery, setSearchQuery] = useState('')
   const expenseCount = expenses.length
-  const orderedExpenses = [...expenses].sort((firstExpense, secondExpense) =>
-    secondExpense.date.localeCompare(firstExpense.date),
+  const normalizedSearchQuery = searchQuery.trim().toLocaleLowerCase()
+
+  const filteredExpenses = normalizedSearchQuery
+    ? expenses.filter((expense) =>
+        expense.description.toLocaleLowerCase().includes(normalizedSearchQuery),
+      )
+    : expenses
+
+  const orderedExpenses = [...filteredExpenses].sort(
+    (firstExpense, secondExpense) =>
+      secondExpense.date.localeCompare(firstExpense.date),
   )
+
   const totalExpenses = expenses.reduce(
     (total, expense) => total + expense.amount,
     0,
   )
+  
   const currentWeekTotal = expenses.reduce(
     (total, expense) =>
       isDateInCurrentWeek(expense.date) ? total + expense.amount : total,
@@ -79,9 +94,35 @@ export const ExpensesView = ({ expenses, onAddExpense }) => {
             <h2 id="history-heading">Expense History</h2>
             <p>Your submitted work expenses will appear here.</p>
           </div>
-          <span className="count-badge">
-            {expenseCount} {expenseCount === 1 ? 'expense' : 'expenses'}
-          </span>
+          <div className="history-controls">
+            {expenseCount > 0 ? (
+              <div className="expense-search">
+                <img src={searchIcon} alt="" aria-hidden="true" />
+                <input
+                  type="search"
+                  value={searchQuery}
+                  aria-label="Search expenses by description"
+                  placeholder="Search expenses"
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                />
+                {searchQuery ? (
+                  <button
+                    type="button"
+                    aria-label="Clear expense search"
+                    onClick={() => setSearchQuery('')}
+                  >
+                    <img src={closeIcon} alt="" aria-hidden="true" />
+                  </button>
+                ) : null}
+              </div>
+            ) : null}
+            <span className="count-badge">
+              {normalizedSearchQuery
+                ? `${filteredExpenses.length} of ${expenseCount}`
+                : expenseCount}{' '}
+              {expenseCount === 1 ? 'expense' : 'expenses'}
+            </span>
+          </div>
         </div>
 
         {expenseCount === 0 ? (
@@ -92,6 +133,19 @@ export const ExpensesView = ({ expenses, onAddExpense }) => {
             <div>
               <h3>No expenses yet</h3>
               <p>Once an expense is added, it will be listed in this workspace.</p>
+            </div>
+          </div>
+        ) : filteredExpenses.length === 0 ? (
+          <div className="empty-state search-empty-state">
+            <span className="empty-state-icon">
+              <img src={searchIcon} alt="" aria-hidden="true" />
+            </span>
+            <div>
+              <h3>No matching expenses</h3>
+              <p>Try a different description or clear your search.</p>
+              <button type="button" onClick={() => setSearchQuery('')}>
+                Clear search
+              </button>
             </div>
           </div>
         ) : (

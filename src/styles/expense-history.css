@@ -1,3 +1,87 @@
+.history-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.expense-search {
+  position: relative;
+  width: min(16rem, 32vw);
+}
+
+.expense-search > img {
+  position: absolute;
+  top: 50%;
+  left: 0.75rem;
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-text-muted);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.expense-search input {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.55rem 2.5rem 0.55rem 2.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  outline: none;
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.expense-search input:focus-visible {
+  border-color: var(--color-primary);
+  outline: 3px solid #fed7aa;
+  outline-offset: 1px;
+  background: var(--color-surface-raised);
+}
+
+.expense-search input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.expense-search button {
+  position: absolute;
+  top: 50%;
+  right: 0.4rem;
+  display: grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.expense-search button:hover {
+  background: var(--color-surface-subtle);
+}
+
+.expense-search button img {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.search-empty-state button {
+  margin-top: 0.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-primary-dark);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
 .expense-table-wrap {
   overflow-x: auto;
 }
@@ -65,6 +149,22 @@
 }
 
 @media (max-width: 47.99rem) {
+  .section-heading {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .history-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .expense-search {
+    width: auto;
+    min-width: 0;
+    flex: 1;
+  }
+
   .expense-table-wrap {
     display: none;
   }
