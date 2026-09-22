@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import closeIcon from '../assets/icons/close.svg'
 import plusIcon from '../assets/icons/plus.svg'
+import { DatePicker } from './DatePicker.jsx'
 
 const DESCRIPTION_MAX_LENGTH = 120
 
@@ -52,6 +53,11 @@ export const ExpenseFormDialog = ({ expense, onClose, onSubmitExpense }) => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target
+
+    handleFieldChange(name, value)
+  }
+
+  const handleFieldChange = (name, value) => {
 
     setFormValues((currentValues) => ({
       ...currentValues,
@@ -184,15 +190,11 @@ export const ExpenseFormDialog = ({ expense, onClose, onSubmitExpense }) => {
 
           <div className="form-field">
             <label htmlFor="expense-date">Date</label>
-            <input
-              id="expense-date"
-              name="date"
-              type="date"
+            <DatePicker
               value={formValues.date}
-              autoComplete="off"
-              aria-invalid={Boolean(errors.date)}
-              aria-describedby="expense-date-message"
-              onChange={handleInputChange}
+              invalid={Boolean(errors.date)}
+              describedBy="expense-date-message"
+              onChange={(date) => handleFieldChange('date', date)}
             />
             <p
               id="expense-date-message"
