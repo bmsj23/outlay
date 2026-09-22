@@ -213,7 +213,7 @@ export const ExpenseFormDialog = ({ expense, onClose, onSubmitExpense }) => {
                 name="amount"
                 type="number"
                 min="0.01"
-                step="0.01"
+                step="1"
                 inputMode="decimal"
                 value={formValues.amount}
                 placeholder="0.00"
