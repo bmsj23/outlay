@@ -142,6 +142,7 @@ export const ExpenseFormDialog = ({ onAddExpense, onClose }) => {
               id="expense-description-message"
               className="field-message"
               data-error={Boolean(errors.description)}
+              aria-live="polite"
             >
               {errors.description ||
                 'Brief description of the work-related expense.'}
@@ -155,6 +156,7 @@ export const ExpenseFormDialog = ({ onAddExpense, onClose }) => {
               name="date"
               type="date"
               value={formValues.date}
+              autoComplete="off"
               aria-invalid={Boolean(errors.date)}
               aria-describedby="expense-date-message"
               onChange={handleInputChange}
@@ -163,6 +165,7 @@ export const ExpenseFormDialog = ({ onAddExpense, onClose }) => {
               id="expense-date-message"
               className="field-message"
               data-error={Boolean(errors.date)}
+              aria-live="polite"
             >
               {errors.date || 'Transaction date'}
             </p>
@@ -181,6 +184,7 @@ export const ExpenseFormDialog = ({ onAddExpense, onClose }) => {
                 inputMode="decimal"
                 value={formValues.amount}
                 placeholder="0.00"
+                autoComplete="off"
                 aria-invalid={Boolean(errors.amount)}
                 aria-describedby="expense-amount-message"
                 onChange={handleInputChange}
@@ -191,6 +195,7 @@ export const ExpenseFormDialog = ({ onAddExpense, onClose }) => {
               id="expense-amount-message"
               className="field-message"
               data-error={Boolean(errors.amount)}
+              aria-live="polite"
             >
               {errors.amount || 'Philippine Peso (PHP)'}
             </p>

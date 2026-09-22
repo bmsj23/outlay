@@ -156,6 +156,10 @@
   color: var(--color-text);
 }
 
+.view-tab:active {
+  transform: scale(0.98);
+}
+
 .view-tab[data-active='true'] {
   background: var(--color-primary);
   color: var(--color-on-primary);
