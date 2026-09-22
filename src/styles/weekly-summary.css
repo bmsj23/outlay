@@ -62,19 +62,35 @@
 }
 
 .weekly-metric-primary {
-  border-color: transparent;
-  background: linear-gradient(135deg, #f97316, #c2410c);
+  background: var(--color-surface-raised);
 }
 
 .weekly-metric-primary p,
 .weekly-metric-primary strong,
 .weekly-metric-primary span {
-  color: var(--color-on-primary);
+  color: inherit;
 }
 
-.weekly-metric-primary p,
+.weekly-metric-primary p {
+  color: var(--color-text-muted);
+}
+
+.weekly-metric-primary strong {
+  color: var(--color-text);
+}
+
 .weekly-metric-primary span {
-  opacity: 0.82;
+  color: var(--color-text-soft);
+}
+
+.weekly-metric-card:last-child {
+  border-color: #fed7aa;
+  background: #fffaf7;
+}
+
+.weekly-metric-card:last-child p,
+.weekly-metric-card:last-child strong {
+  color: var(--color-primary-dark);
 }
 
 .weekly-chart {
@@ -295,22 +311,40 @@
 
 @media (max-width: 47.99rem) {
   .weekly-metric-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 0.65rem;
     margin-bottom: 1.25rem;
   }
 
   .weekly-metric-card {
-    min-height: 7.5rem;
+    display: grid;
+    min-height: auto;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'label value'
+      'label note';
+    align-items: center;
+    gap: 0.15rem 1rem;
     padding: 1rem;
   }
 
-  .weekly-metric-primary {
-    grid-column: 1 / -1;
+  .weekly-metric-card p {
+    grid-area: label;
+    font-size: 0.8rem;
+    letter-spacing: 0;
+    text-transform: none;
   }
 
   .weekly-metric-card strong {
+    grid-area: value;
+    justify-self: end;
     font-size: 1.2rem;
+  }
+
+  .weekly-metric-card span {
+    grid-area: note;
+    justify-self: end;
+    text-align: right;
   }
 
   .weekly-chart {
@@ -341,7 +375,16 @@
 
   .weekly-breakdown-heading {
     align-items: flex-start;
-    padding: 1rem;
+    padding: 0;
+    border-bottom: 0;
+    margin-bottom: 0.75rem;
+  }
+
+  .weekly-breakdown {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
   }
 
   .weekly-table-wrap {
@@ -350,6 +393,11 @@
 
   .weekly-list {
     display: block;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface-raised);
+    box-shadow: var(--shadow-sm);
   }
 
   .weekly-list li {

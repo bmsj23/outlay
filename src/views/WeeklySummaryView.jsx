@@ -62,7 +62,7 @@ export const WeeklySummaryView = ({ expenses }) => {
       <section className="weekly-chart" aria-labelledby="chart-heading">
         <div className="weekly-chart-heading">
           <div>
-            <h2 id="chart-heading">Weekly Spending</h2>
+            <h2 id="chart-heading">Expenses by Week</h2>
             <p>All {weeks.length} weeks of {selectedYear}</p>
           </div>
           <span>PHP</span>
