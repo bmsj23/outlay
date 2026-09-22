@@ -9,9 +9,6 @@ export const AppHeader = () => (
         </span>
         <span>Outlay</span>
       </a>
-      <span className="currency-badge" aria-label="Currency: Philippine peso">
-        PHP
-      </span>
     </div>
   </header>
 )
