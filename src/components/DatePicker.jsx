@@ -128,6 +128,15 @@ export const DatePicker = ({
     setVisibleMonth(createMonthStart(initialDate))
     setFocusedDateKey(toDateKey(initialDate))
     setIsOpen(true)
+
+    if (window.matchMedia('(max-width: 47.99rem)').matches) {
+      requestAnimationFrame(() => {
+        pickerRef.current?.scrollIntoView({
+          block: 'center',
+          behavior: 'smooth',
+        })
+      })
+    }
   }
 
   const handleSelectDate = (date) => {
