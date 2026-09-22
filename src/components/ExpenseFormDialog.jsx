@@ -2,16 +2,24 @@ import { useEffect, useRef, useState } from 'react'
 import closeIcon from '../assets/icons/close.svg'
 import plusIcon from '../assets/icons/plus.svg'
 
-const initialFormValues = {
-  description: '',
-  date: '',
-  amount: '',
+const formatDateForInput = (date) => {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+
+  return `${year}-${month}-${day}`
 }
+
+const createInitialFormValues = () => ({
+  description: '',
+  date: formatDateForInput(new Date()),
+  amount: '',
+})
 
 export const ExpenseFormDialog = ({ onAddExpense, onClose }) => {
   const dialogRef = useRef(null)
   const descriptionInputRef = useRef(null)
-  const [formValues, setFormValues] = useState(initialFormValues)
+  const [formValues, setFormValues] = useState(createInitialFormValues)
   const [errors, setErrors] = useState({})
 
   useEffect(() => {
@@ -76,7 +84,7 @@ export const ExpenseFormDialog = ({ onAddExpense, onClose }) => {
       return
     }
 
-    setFormValues(initialFormValues)
+    setFormValues(createInitialFormValues())
     setErrors({})
     onAddExpense({
       date: formValues.date,

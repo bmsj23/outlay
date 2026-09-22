@@ -23,7 +23,7 @@
 
 .weekly-metric-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
   margin-bottom: 2rem;
 }
@@ -62,7 +62,11 @@
 }
 
 .weekly-metric-primary {
-  background: var(--color-surface-raised);
+  border-color: transparent;
+  background:
+    radial-gradient(circle at 96% 0%, rgb(255 255 255 / 18%), transparent 34%),
+    linear-gradient(135deg, #f97316 0%, #ea580c 58%, #c2410c 100%);
+  color: var(--color-on-primary);
 }
 
 .weekly-metric-primary p,
@@ -72,25 +76,29 @@
 }
 
 .weekly-metric-primary p {
-  color: var(--color-text-muted);
+  color: rgb(255 255 255 / 82%);
 }
 
 .weekly-metric-primary strong {
-  color: var(--color-text);
+  color: inherit;
 }
 
 .weekly-metric-primary span {
-  color: var(--color-text-soft);
+  color: rgb(255 255 255 / 82%);
 }
 
-.weekly-metric-card:last-child {
+.weekly-metric-current {
   border-color: #fed7aa;
   background: #fffaf7;
 }
 
-.weekly-metric-card:last-child p,
-.weekly-metric-card:last-child strong {
+.weekly-metric-current p,
+.weekly-metric-current strong {
   color: var(--color-primary-dark);
+}
+
+.weekly-metric-current span {
+  color: var(--color-text-soft);
 }
 
 .weekly-chart {

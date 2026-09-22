@@ -20,6 +20,7 @@ export const WeeklySummaryView = ({ expenses }) => {
   const annualTotal = weeks.reduce((total, week) => total + week.total, 0)
   const averagePerWeek = weeks.length > 0 ? annualTotal / weeks.length : 0
   const highestWeeklyTotal = Math.max(...weeks.map((week) => week.total), 0)
+  const currentWeek = weeks.find((week) => week.isCurrentWeek)
   const peakWeek =
     annualTotal > 0
       ? weeks.reduce((peak, week) => (week.total > peak.total ? week : peak))
@@ -42,6 +43,17 @@ export const WeeklySummaryView = ({ expenses }) => {
           <p>Total for {selectedYear}</p>
           <strong>{currencyFormatter.format(annualTotal)}</strong>
           <span>All recorded expenses this year</span>
+        </article>
+        <article className="weekly-metric-card weekly-metric-current">
+          <p>Current week</p>
+          <strong>
+            {currencyFormatter.format(currentWeek?.total ?? 0)}
+          </strong>
+          <span>
+            {currentWeek
+              ? `Week ${currentWeek.weekNumber} · ${formatDateRange(currentWeek.startDate, currentWeek.endDate)}`
+              : 'Outside the selected year'}
+          </span>
         </article>
         <article className="weekly-metric-card">
           <p>Average per week</p>
