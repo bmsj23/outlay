@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { WeeklyDetailDialog } from '../components/WeeklyDetailDialog.jsx'
 import { aggregateExpensesByWeek } from '../utils/weeklyExpenses.js'
 
 const currencyFormatter = new Intl.NumberFormat('en-PH', {
@@ -15,6 +17,7 @@ const formatDateRange = (startDate, endDate) =>
   `${dateFormatter.format(new Date(`${startDate}T00:00:00Z`))} - ${dateFormatter.format(new Date(`${endDate}T00:00:00Z`))}`
 
 export const WeeklySummaryView = ({ expenses }) => {
+  const [selectedWeekNumber, setSelectedWeekNumber] = useState(null)
   const selectedYear = new Date().getFullYear()
   const weeks = aggregateExpensesByWeek(expenses, selectedYear)
   const annualTotal = weeks.reduce((total, week) => total + week.total, 0)
@@ -25,6 +28,26 @@ export const WeeklySummaryView = ({ expenses }) => {
     annualTotal > 0
       ? weeks.reduce((peak, week) => (week.total > peak.total ? week : peak))
       : null
+  const selectedWeek =
+    weeks.find((week) => week.weekNumber === selectedWeekNumber) ?? null
+  const selectedWeekExpenses = selectedWeek
+    ? expenses
+        .filter(
+          (expense) =>
+            expense.date >= selectedWeek.startDate &&
+            expense.date <= selectedWeek.endDate,
+        )
+        .sort((firstExpense, secondExpense) =>
+          secondExpense.date.localeCompare(firstExpense.date),
+        )
+    : []
+
+  const handleWeekKeyDown = (event, weekNumber) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      setSelectedWeekNumber(weekNumber)
+    }
+  }
 
   return (
     <section
@@ -104,22 +127,32 @@ export const WeeklySummaryView = ({ expenses }) => {
                 return (
                   <li
                     key={week.weekNumber}
-                    aria-label={`Week ${week.weekNumber}: ${currencyFormatter.format(week.total)}`}
                     aria-current={week.isCurrentWeek ? 'date' : undefined}
                     data-current={week.isCurrentWeek}
                     data-has-value={week.total > 0}
-                    title={`Week ${week.weekNumber}: ${currencyFormatter.format(week.total)}`}
                   >
-                    <span
-                      className="weekly-chart-bar-fill"
-                      style={{ '--bar-height': `${barHeight}%` }}
-                    />
-                    <span className="weekly-chart-label" aria-hidden="true">
-                      {week.weekNumber % 4 === 1 ||
-                      week.weekNumber === weeks.length
-                        ? week.weekNumber
-                        : ''}
-                    </span>
+                    <button
+                      className="weekly-chart-bar-button"
+                      type="button"
+                      aria-label={`View Week ${week.weekNumber}, ${formatDateRange(week.startDate, week.endDate)}, ${currencyFormatter.format(week.total)}`}
+                      onClick={() => setSelectedWeekNumber(week.weekNumber)}
+                    >
+                      <span className="weekly-chart-tooltip" aria-hidden="true">
+                        <strong>Week {week.weekNumber}</strong>
+                        <span>{formatDateRange(week.startDate, week.endDate)}</span>
+                        <b>{currencyFormatter.format(week.total)}</b>
+                      </span>
+                      <span
+                        className="weekly-chart-bar-fill"
+                        style={{ '--bar-height': `${barHeight}%` }}
+                      />
+                      <span className="weekly-chart-label" aria-hidden="true">
+                        {week.weekNumber % 4 === 1 ||
+                        week.weekNumber === weeks.length
+                          ? week.weekNumber
+                          : ''}
+                      </span>
+                    </button>
                   </li>
                 )
               })}
@@ -148,7 +181,17 @@ export const WeeklySummaryView = ({ expenses }) => {
             </thead>
             <tbody>
               {weeks.map((week) => (
-                <tr key={week.weekNumber} data-current={week.isCurrentWeek}>
+                <tr
+                  key={week.weekNumber}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View Week ${week.weekNumber} details`}
+                  data-current={week.isCurrentWeek}
+                  onClick={() => setSelectedWeekNumber(week.weekNumber)}
+                  onKeyDown={(event) =>
+                    handleWeekKeyDown(event, week.weekNumber)
+                  }
+                >
                   <td>Week {week.weekNumber}</td>
                   <td>{formatDateRange(week.startDate, week.endDate)}</td>
                   <td>{currencyFormatter.format(week.total)}</td>
@@ -161,15 +204,30 @@ export const WeeklySummaryView = ({ expenses }) => {
         <ol className="weekly-list" aria-label="Weekly expense totals">
           {weeks.map((week) => (
             <li key={week.weekNumber} data-current={week.isCurrentWeek}>
-              <div>
-                <strong>Week {week.weekNumber}</strong>
-                <span>{formatDateRange(week.startDate, week.endDate)}</span>
-              </div>
-              <p>{currencyFormatter.format(week.total)}</p>
+              <button
+                className="weekly-list-button"
+                type="button"
+                aria-label={`View Week ${week.weekNumber}, ${formatDateRange(week.startDate, week.endDate)}, ${currencyFormatter.format(week.total)}`}
+                onClick={() => setSelectedWeekNumber(week.weekNumber)}
+              >
+                <div>
+                  <strong>Week {week.weekNumber}</strong>
+                  <span>{formatDateRange(week.startDate, week.endDate)}</span>
+                </div>
+                <p>{currencyFormatter.format(week.total)}</p>
+              </button>
             </li>
           ))}
         </ol>
       </section>
+
+      {selectedWeek ? (
+        <WeeklyDetailDialog
+          expenses={selectedWeekExpenses}
+          week={selectedWeek}
+          onClose={() => setSelectedWeekNumber(null)}
+        />
+      ) : null}
     </section>
   )
 }
