@@ -1,7 +1,7 @@
 import { ExpensesView } from '../views/ExpensesView.jsx'
 import { WeeklySummaryView } from '../views/WeeklySummaryView.jsx'
 import { AddExpenseButton } from './AddExpenseButton.jsx'
-import { AppFooter } from './AppFooter.jsx'
+// import { AppFooter } from './AppFooter.jsx'
 import { AppHeader } from './AppHeader.jsx'
 import { ExpenseDetailDialog } from './ExpenseDetailDialog.jsx'
 import { ExpenseFormDialog } from './ExpenseFormDialog.jsx'
@@ -65,7 +65,7 @@ export const AppLayout = ({
         )}
       </main>
 
-      <AppFooter />
+      {/* <AppFooter /> */}
 
       {isExpenseFormOpen ? (
         <ExpenseFormDialog
