@@ -1,6 +1,7 @@
+import { AddExpenseButton } from '../components/AddExpenseButton.jsx'
 import emptyReceiptIcon from '../assets/icons/empty-receipt.svg'
 
-export const ExpensesView = () => (
+export const ExpensesView = ({ onAddExpense }) => (
   <section
     className="view-panel"
     id="expenses-panel"
@@ -40,5 +41,10 @@ export const ExpensesView = () => (
         </div>
       </div>
     </section>
+
+    <AddExpenseButton
+      className="mobile-add-expense"
+      onClick={onAddExpense}
+    />
   </section>
 )

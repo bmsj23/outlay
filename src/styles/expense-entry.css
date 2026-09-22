@@ -1,0 +1,342 @@
+.add-expense-button {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  box-shadow: 0 2px 5px rgb(157 67 0 / 14%);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.add-expense-button:hover {
+  background: var(--color-primary-dark);
+  box-shadow: 0 4px 10px rgb(157 67 0 / 18%);
+}
+
+.add-expense-button:active {
+  transform: scale(0.98);
+}
+
+.add-expense-button img {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.mobile-add-expense {
+  display: none;
+}
+
+.expense-dialog {
+  width: min(calc(100% - 2rem), 28.75rem);
+  max-height: calc(100svh - 2rem);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: transparent;
+  color: var(--color-text);
+  overflow: visible;
+}
+
+.expense-dialog::backdrop {
+  background: rgb(47 49 48 / 46%);
+  backdrop-filter: blur(3px);
+}
+
+.expense-dialog-card {
+  overflow: hidden;
+  border: 1px solid rgb(224 192 177 / 32%);
+  border-radius: inherit;
+  background: var(--color-surface-raised);
+  box-shadow: 0 24px 60px rgb(26 28 28 / 24%);
+}
+
+.sheet-handle {
+  display: none;
+}
+
+.expense-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem 1.5rem 0.9rem;
+}
+
+.expense-dialog-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  letter-spacing: -0.03em;
+}
+
+.expense-dialog-header p {
+  margin-top: 0.15rem;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.dialog-close-button {
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: 0 0 auto;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-surface-muted);
+  cursor: pointer;
+}
+
+.dialog-close-button:hover {
+  background: var(--color-surface-subtle);
+}
+
+.dialog-close-button img {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.expense-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 0.9rem;
+  padding: 0.75rem 1.5rem 1.5rem;
+}
+
+.form-field {
+  min-width: 0;
+}
+
+.form-field-description {
+  grid-column: 1 / -1;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--color-text);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.form-field input {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid transparent;
+  border-radius: 0.75rem;
+  outline: none;
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.875rem;
+  box-shadow: inset 0 1px 2px rgb(26 28 28 / 4%);
+}
+
+.form-field input:hover {
+  border-color: var(--color-border);
+}
+
+.form-field input:focus-visible {
+  border-color: var(--color-primary);
+  outline: 3px solid #fed7aa;
+  outline-offset: 1px;
+  background: var(--color-surface-raised);
+}
+
+.form-field > p {
+  margin-top: 0.35rem;
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+
+.amount-input {
+  position: relative;
+}
+
+.amount-input > span:first-child {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 0.85rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  transform: translateY(-50%);
+}
+
+.amount-input input {
+  padding-inline: 2rem 3.5rem;
+}
+
+.currency-suffix {
+  position: absolute;
+  top: 50%;
+  right: 0.55rem;
+  padding: 0.25rem 0.45rem;
+  border-radius: 0.4rem;
+  background: var(--color-surface-subtle);
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  transform: translateY(-50%);
+}
+
+.expense-form-actions {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.35rem;
+}
+
+.form-button {
+  display: inline-flex;
+  min-height: 2.6rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1rem;
+  border: 0;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.form-button-secondary {
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+}
+
+.form-button-secondary:hover {
+  background: var(--color-surface-subtle);
+}
+
+.form-button-primary {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-button-primary img {
+  width: 1rem;
+  height: 1rem;
+}
+
+.form-button-primary:disabled {
+  background: #fdba74;
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+@media (max-width: 47.99rem) {
+  .desktop-add-expense {
+    display: none;
+  }
+
+  .mobile-add-expense {
+    position: sticky;
+    z-index: 5;
+    bottom: 0.75rem;
+    display: flex;
+    width: 100%;
+    min-height: 3rem;
+    margin-top: 1rem;
+    box-shadow: 0 8px 20px rgb(157 67 0 / 20%);
+  }
+
+  .expense-dialog {
+    width: 100%;
+    max-width: none;
+    max-height: min(92svh, 44rem);
+    margin: 0;
+    inset: auto 0 0;
+    border-radius: 1.75rem 1.75rem 0 0;
+  }
+
+  .sheet-handle {
+    display: block;
+    width: 3rem;
+    height: 0.3rem;
+    margin: 0.65rem auto 0;
+    border-radius: var(--radius-pill);
+    background: var(--color-border);
+  }
+
+  .expense-dialog-header {
+    padding: 0.75rem 1rem 0.85rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .expense-form {
+    grid-template-columns: 1fr;
+    gap: 0.95rem;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+
+  .form-field-description,
+  .expense-form-actions {
+    grid-column: auto;
+  }
+
+  .form-field input {
+    min-height: 3rem;
+  }
+
+  .expense-form-actions {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .form-button {
+    width: 100%;
+    min-height: 3rem;
+  }
+
+  .form-button-primary {
+    order: -1;
+  }
+
+  .form-button-secondary {
+    background: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .expense-dialog[open] .expense-dialog-card {
+    animation: dialog-enter 180ms ease-out;
+  }
+
+  @media (max-width: 47.99rem) {
+    .expense-dialog[open] .expense-dialog-card {
+      animation-name: sheet-enter;
+    }
+  }
+}
+
+@keyframes dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+}
+
+@keyframes sheet-enter {
+  from {
+    transform: translateY(100%);
+  }
+}
