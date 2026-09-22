@@ -38,6 +38,7 @@ export const ExpensesView = ({
   onSelectExpense,
 }) => {
   const [searchQuery, setSearchQuery] = useState('')
+  const [sortOrder, setSortOrder] = useState('newest')
   const expenseCount = expenses.length
   const normalizedSearchQuery = searchQuery.trim().toLocaleLowerCase()
 
@@ -47,10 +48,10 @@ export const ExpensesView = ({
       )
     : expenses
 
-  const orderedExpenses = [...filteredExpenses].sort(
-    (firstExpense, secondExpense) =>
-      secondExpense.date.localeCompare(firstExpense.date),
-  )
+  const orderedExpenses =
+    sortOrder === 'newest'
+      ? [...filteredExpenses].reverse()
+      : filteredExpenses
 
   const totalExpenses = expenses.reduce(
     (total, expense) => total + expense.amount,
@@ -134,6 +135,21 @@ export const ExpensesView = ({
                 </button>
               ) : null}
             </div>
+            <button
+              className="expense-sort-button"
+              type="button"
+              aria-label={`Sort by ${sortOrder === 'newest' ? 'oldest' : 'newest'} added first`}
+              onClick={() =>
+                setSortOrder((currentOrder) =>
+                  currentOrder === 'newest' ? 'oldest' : 'newest',
+                )
+              }
+            >
+              <span>Sort</span>
+              <strong>
+                {sortOrder === 'newest' ? 'Newest added' : 'Oldest added'}
+              </strong>
+            </button>
           </div>
         ) : null}
 
