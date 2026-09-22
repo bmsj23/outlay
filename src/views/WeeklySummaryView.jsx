@@ -19,6 +19,7 @@ export const WeeklySummaryView = ({ expenses }) => {
   const weeks = aggregateExpensesByWeek(expenses, selectedYear)
   const annualTotal = weeks.reduce((total, week) => total + week.total, 0)
   const averagePerWeek = weeks.length > 0 ? annualTotal / weeks.length : 0
+  const highestWeeklyTotal = Math.max(...weeks.map((week) => week.total), 0)
   const peakWeek =
     annualTotal > 0
       ? weeks.reduce((peak, week) => (week.total > peak.total ? week : peak))
@@ -57,6 +58,63 @@ export const WeeklySummaryView = ({ expenses }) => {
           </span>
         </article>
       </div>
+
+      <section className="weekly-chart" aria-labelledby="chart-heading">
+        <div className="weekly-chart-heading">
+          <div>
+            <h2 id="chart-heading">Weekly Spending</h2>
+            <p>All {weeks.length} weeks of {selectedYear}</p>
+          </div>
+          <span>PHP</span>
+        </div>
+
+        <div className="weekly-chart-body">
+          <div className="weekly-chart-scale" aria-hidden="true">
+            <span>{currencyFormatter.format(highestWeeklyTotal)}</span>
+            <span>{currencyFormatter.format(0)}</span>
+          </div>
+          <div
+            className="weekly-chart-scroll"
+            role="group"
+            aria-label={`Weekly expense chart for ${selectedYear}`}
+            tabIndex={0}
+          >
+            <ol
+              className="weekly-chart-bars"
+              style={{ '--week-count': weeks.length }}
+            >
+              {weeks.map((week) => {
+                const barHeight =
+                  highestWeeklyTotal > 0
+                    ? (week.total / highestWeeklyTotal) * 100
+                    : 0
+
+                return (
+                  <li
+                    key={week.weekNumber}
+                    aria-label={`Week ${week.weekNumber}: ${currencyFormatter.format(week.total)}`}
+                    aria-current={week.isCurrentWeek ? 'date' : undefined}
+                    data-current={week.isCurrentWeek}
+                    data-has-value={week.total > 0}
+                    title={`Week ${week.weekNumber}: ${currencyFormatter.format(week.total)}`}
+                  >
+                    <span
+                      className="weekly-chart-bar-fill"
+                      style={{ '--bar-height': `${barHeight}%` }}
+                    />
+                    <span className="weekly-chart-label" aria-hidden="true">
+                      {week.weekNumber % 4 === 1 ||
+                      week.weekNumber === weeks.length
+                        ? week.weekNumber
+                        : ''}
+                    </span>
+                  </li>
+                )
+              })}
+            </ol>
+          </div>
+        </div>
+      </section>
 
       <section className="weekly-breakdown" aria-labelledby="breakdown-heading">
         <div className="weekly-breakdown-heading">
